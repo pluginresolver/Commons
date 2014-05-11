@@ -28,9 +28,7 @@ public enum Enchantments {
 	ARROW_FIRE(Enchantment.ARROW_FIRE, "arrowfire", "firearrow", "flamearrow", "flame", "af"),
 	ARROW_DAMAGE(Enchantment.ARROW_DAMAGE, "arrowdamage", "power", "arrowpower", "ad"),
 	ARROW_KNOCKBACK(Enchantment.ARROW_KNOCKBACK, "arrowknockback", "punch", "ak", "arrowpunch", "arrowkb"),
-	ARROW_INFINITE(Enchantment.ARROW_INFINITE, "infinity", "infinitearrows", "infarrow", "infinite", "unlimited", "unlimitedarrows", "ai"),
-	LUCK(Enchantment.LUCK, "luck", "luckofsea", "luckofseas", "rodluck"),
-	LURE(Enchantment.LURE, "lure", "rodlure");
+	ARROW_INFINITE(Enchantment.ARROW_INFINITE, "infinity", "infinitearrows", "infarrow", "infinite", "unlimited", "unlimitedarrows", "ai");
 
 	private static Map<String, Enchantment> enchantments = new HashMap<>();
 

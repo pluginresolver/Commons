@@ -1,6 +1,6 @@
 package com.caved_in.commons;
 
-import com.caved_in.commons.commands.CommandRegister;
+import com.caved_in.commons.command.CommandRegister;
 import com.caved_in.commons.config.Configuration;
 import com.caved_in.commons.config.SqlConfiguration;
 import com.caved_in.commons.config.WorldConfiguration;
@@ -8,9 +8,8 @@ import com.caved_in.commons.item.Items;
 import com.caved_in.commons.listeners.*;
 import com.caved_in.commons.menu.serverselection.ServerMenuGenerator;
 import com.caved_in.commons.menu.serverselection.ServerMenuWrapper;
-import com.caved_in.commons.npc.NPC;
-import com.caved_in.commons.npc.NpcHandler;
 import com.caved_in.commons.player.Players;
+import com.caved_in.commons.plugin.Plugins;
 import com.caved_in.commons.sql.BansSQL;
 import com.caved_in.commons.sql.DisguiseSQL;
 import com.caved_in.commons.sql.FriendSQL;
@@ -45,14 +44,14 @@ public class Commons extends JavaPlugin {
 	public static RunnableManager threadManager;
 	public static ServerMenuWrapper serverMenu;
 
-	public static String WARP_DATA_FOLDER = "plugins/Tunnels-Common/Warps/";
-	private static String PLUGIN_DATA_FOLDER = "plugins/Tunnels-Common/";
+	public static String WARP_DATA_FOLDER = "plugins/Commons/Warps/";
+	private static String PLUGIN_DATA_FOLDER = "plugins/Commons/";
 
 	private static Configuration globalConfig = new Configuration();
 
 	public static Commons getInstance() {
 		if (plugin == null) {
-			plugin = (Commons) Bukkit.getPluginManager().getPlugin("Tunnels-Common");
+			plugin = (Commons) Bukkit.getPluginManager().getPlugin("Commons");
 		}
 		return plugin;
 	}
@@ -123,18 +122,6 @@ public class Commons extends JavaPlugin {
 			CommandRegister.registerCommands();
 		}
 
-		//If the NPC feature's enabled, then enable it!
-		if (getConfiguration().getNPCSEnabled()) {
-			NpcHandler npcHandler = NpcHandler.getInstance();
-
-			//Npc Handler startup
-			npcHandler.startUp();
-
-			for (NPC npc : NpcHandler.getInstance().getLookup().values()) {
-				npcHandler.updateNPC(npc);
-			}
-		}
-
 		registerListeners(); // Register all our event listeners
 
 		// Load all the warps
@@ -142,7 +129,11 @@ public class Commons extends JavaPlugin {
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			Players.addData(player);
-			if (getWorldConfig().isCompassMenuEnabled()) {
+
+		}
+
+		if (Plugins.pluginExists("PopupMenuAPI") && getWorldConfig().isCompassMenuEnabled()) {
+			for (Player player : Players.allPlayers()) {
 				if (!Players.hasItem(player, Material.COMPASS)) {
 					Players.giveItem(player, Items.makeItem(Material.COMPASS, ChatColor.GREEN + "Server Selector"));
 				}
@@ -158,17 +149,12 @@ public class Commons extends JavaPlugin {
 
 		WorldConfiguration worldConfig = globalConfig.getWorldConfig();
 
-		if (globalConfig.getNPCSEnabled()) {
-			registerListener(new NPCListener());
-			messageConsole("&aRegistered the NPC Listener");
-		}
-
 		if (!worldConfig.hasExternalChatHandler()) {
 			registerListener(new ChatListener());
-			messageConsole("&aUsing Tunnels-Common Chat Listener");
+			messageConsole("&aUsing Commons Chat Listener");
 		}
 
-		if (worldConfig.isCompassMenuEnabled()) {
+		if (Plugins.pluginExists("PopupMenuAPI") && worldConfig.isCompassMenuEnabled()) {
 			serverMenu = new ServerMenuWrapper("Server Selection", ServerMenuGenerator.generateMenuItems(Commons.getConfiguration().getItemMenuConfig()
 					.getXmlItems()));
 			registerListener(new CompassListener());
@@ -286,11 +272,6 @@ public class Commons extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-
-		if (getConfiguration().getNPCSEnabled()) {
-			NpcHandler npcHandler = NpcHandler.getInstance();
-			npcHandler.shutdown();
-		}
 
 		HandlerList.unregisterAll(this);
 		Bukkit.getScheduler().cancelTasks(this);

@@ -1,6 +1,6 @@
 package com.caved_in.commons.listeners;
 
-import com.caved_in.commons.commands.CommandMessage;
+import com.caved_in.commons.command.commands.CommandMessage;
 import com.caved_in.commons.player.Players;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

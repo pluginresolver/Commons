@@ -2,13 +2,7 @@ package com.caved_in.commons.friends;
 
 import com.google.common.collect.Sets;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import static ch.lambdaj.Lambda.*;
-import static org.hamcrest.Matchers.is;
+import java.util.*;
 
 public class FriendList {
 	private String playerName = "";
@@ -23,7 +17,9 @@ public class FriendList {
 	public FriendList(String playerName, Collection<Friend> playerFriends) {
 		this.playerName = playerName;
 		//Create an indexed map of playerFriends of the Friend class where the key is the friends name
-		this.playerFriends = index(playerFriends, on(Friend.class).getFriendName());
+		for (Friend friend : playerFriends) {
+			this.playerFriends.put(friend.getFriendName(), friend);
+		}
 	}
 
 	public String getPlayerName() {
@@ -55,7 +51,13 @@ public class FriendList {
 
 	public Set<Friend> getUnacceptedFriends() {
 		if (modified || unacceptedFriends == null) {
-			unacceptedFriends = Sets.newHashSet(select(getFriends(), having(on(Friend.class).isAccepted(), is(true))));
+			unacceptedFriends = new HashSet<>();
+			for (Friend friend : playerFriends.values()) {
+				if (friend.isAccepted()) {
+					continue;
+				}
+				unacceptedFriends.add(friend);
+			}
 			modified = false;
 		}
 		return unacceptedFriends;

@@ -1,10 +1,9 @@
-name: Tunnels-Common
+name: Commons
 main: com.caved_in.commons.Commons
-version: 1.2-SNAPSHOT
-description: Commons Library built for easier plugin development and server management
-author: Brandon
-depend: [PopupMenuAPI]
-softdepend: [TagAPI]
+version: 1.2.1
+description: Standard library used to back all servers on the network
+author: TheGamersCave
+softdepend: [PopupMenuAPI, TagAPI]
 commands:
    buypremium:
       description: Used to add premium (Console only)

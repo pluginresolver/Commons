@@ -69,6 +69,7 @@ public class PlayerWrapper {
 			friendsList = Commons.friendDatabase.hasData(playerName) ? new FriendList(playerName, Commons.friendDatabase.getFriends(playerName)) : new FriendList(playerName);
 		} else {
 			friendsList = new FriendList(playerName);
+			this.prefix = "";
 		}
 	}
 
@@ -261,10 +262,10 @@ public class PlayerWrapper {
 	}
 
 	/**
-	 * @param preTeleportLocation
+	 * @param location
 	 */
-	public void setPreTeleportLocation(Location preTeleportLocation) {
-		this.preTeleportLocation = preTeleportLocation;
+	public void setPreTeleportLocation(Location location) {
+		this.preTeleportLocation = location;
 	}
 
 	public boolean isInDebugMode() {

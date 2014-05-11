@@ -15,7 +15,6 @@ import com.caved_in.commons.warp.Warp;
 import com.caved_in.commons.world.WorldHeight;
 import com.caved_in.commons.world.Worlds;
 import com.google.common.collect.Sets;
-import net.minecraft.util.io.netty.channel.Channel;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -114,7 +113,7 @@ public class Players {
 			playerData.put(playerName, playerWrapper);
 		} else {
 			playerWrapper = new PlayerWrapper(playerName, 0);
-			playerData.put(playerName,playerWrapper);
+			playerData.put(playerName, playerWrapper);
 		}
 	}
 
@@ -225,10 +224,6 @@ public class Players {
 		return getPlayer(playerName) != null;
 	}
 
-	public static boolean isOnline(UUID uniqueId) {
-		return getPlayer(uniqueId) != null;
-	}
-
 	/**
 	 * Gets an online player based on the name passed.
 	 *
@@ -237,14 +232,10 @@ public class Players {
 	 * @see Bukkit#getPlayer(String)
 	 * @since 1.0
 	 */
-	@Deprecated
 	public static Player getPlayer(String playerName) {
 		return Bukkit.getPlayer(playerName);
 	}
 
-	public static Player getPlayer(UUID uniqueId) {
-		return Bukkit.getPlayer(uniqueId);
-	}
 
 	/**
 	 * Gets a player based on the {@link com.caved_in.commons.player.PlayerWrapper} passed
@@ -422,7 +413,7 @@ public class Players {
 	 * Sends messages to the commandsender; Automagically formats '&' to their {@link org.bukkit.ChatColor} correspondants
 	 *
 	 * @param messageReceiver commandsender to send the message to
-	 * @param messages      messages to send
+	 * @param messages        messages to send
 	 * @since 1.0
 	 */
 	public static void sendMessage(CommandSender messageReceiver, String... messages) {
@@ -435,7 +426,7 @@ public class Players {
 	 * Sends a message to the commandsender; Automagically formats '&' to their {@link org.bukkit.ChatColor} correspondants
 	 *
 	 * @param messageReceiver commandsender to send the message to
-	 * @param message       message to send
+	 * @param message         message to send
 	 * @since 1.0
 	 */
 	public static void sendMessage(CommandSender messageReceiver, String message) {
@@ -445,13 +436,14 @@ public class Players {
 
 	/**
 	 * Sends a message to the receiver
+	 *
 	 * @param messageReceiver
 	 * @param message
 	 * @param messageAmount
 	 */
 	public static void sendRepeatedMessage(CommandSender messageReceiver, String message, int messageAmount) {
-		for(int i = 0; i < messageAmount; i++) {
-			sendMessage(messageReceiver,message);
+		for (int i = 0; i < messageAmount; i++) {
+			sendMessage(messageReceiver, message);
 		}
 	}
 
@@ -988,8 +980,8 @@ public class Players {
 	}
 
 	public static void playSoundAll(Sound sound, int volume, float f) {
-		for(Player p : allPlayers()) {
-			Sounds.playSound(p,sound,volume,f);
+		for (Player p : allPlayers()) {
+			Sounds.playSound(p, sound, volume, f);
 		}
 	}
 
@@ -1054,18 +1046,4 @@ public class Players {
 		}
 	}
 
-	/**
-	 * Get the network channel of a player
-	 *
-	 * @param player player to get the channel of
-	 * @return {@link net.minecraft.util.io.netty.channel.Channel} which manages the player
-	 */
-	public static Channel getChannel(Player player) {
-		try {
-			return (Channel) channelField.get(getNetworkManager(player));
-		} catch (IllegalAccessException e) {
-			Commons.messageConsole("Failed to get the channel of player: " + player.getName());
-			return null;
-		}
-	}
 }
