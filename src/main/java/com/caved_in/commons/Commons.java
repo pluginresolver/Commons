@@ -87,7 +87,7 @@ public class Commons extends BukkitPlugin {
 
     private Gson gson = new GsonBuilder().setPrettyPrinting()
             .registerTypeAdapter(ItemStack.class, new ItemStackAdapter())
-//            .registerTypeAdapter(ItemStack.class, new BrokenItemStackAdapter())
+//            .registerTypeAdapter(ItemStack.class, new ItemStackAdapter())
             .registerTypeAdapter(ArmorInventory.class, new ArmorInventoryAdapter())
             .registerTypeAdapter(CommandConfiguration.class, new CommandConfigurationAdapter())
             .registerTypeAdapter(DebugConfig.class, new DebugConfigAdapater())

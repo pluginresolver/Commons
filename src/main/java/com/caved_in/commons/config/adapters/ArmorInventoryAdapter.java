@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import java.lang.reflect.Type;
 
 public class ArmorInventoryAdapter implements JsonSerializer<ArmorInventory>, JsonDeserializer<ArmorInventory> {
-    Gson gson = new GsonBuilder().registerTypeAdapter(ItemStack.class, new BrokenItemStackAdapter()).create();
+    Gson gson = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ItemStackAdapter()).create();
 
     public ArmorInventory deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext deserializer) throws JsonParseException {
         ArmorInventory inv = new ArmorInventory();

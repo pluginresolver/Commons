@@ -13,7 +13,7 @@ public class InventoryAdapter implements JsonSerializer<Inventory>, JsonDeserial
     private GsonBuilder gsonBuilder = new GsonBuilder();
 
     public InventoryAdapter() {
-        gsonBuilder.registerTypeAdapter(ItemStack.class, new BrokenItemStackAdapter());
+        gsonBuilder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());
     }
 
     @Override
