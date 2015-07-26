@@ -15,8 +15,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemBuilder {
+    /**
+     * ToDo: Implement logic to make banners
+     */
+
     private Material material;
     private MaterialData materialData;
 
@@ -34,6 +39,10 @@ public class ItemBuilder {
 
     private Attributes attributes;
     private List<Attributes.Attribute> attributeList = new ArrayList<>();
+
+    private boolean skull = false;
+
+    private String skullOwner;
 
     /* Whether or not the item is unbreakable, by default false, as most items break! */
     private boolean unbreakable = false;
@@ -147,6 +156,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder enchantments(Set<EnchantWrapper> enchants) {
+        enchantments.addAll(enchants.stream().collect(Collectors.toList()));
+        return this;
+    }
+
     public ItemBuilder materialData(MaterialData materialData) {
         this.materialData = materialData;
         return this;
@@ -162,13 +176,23 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder skull(String owner) {
+        this.skull = true;
+        this.skullOwner = owner;
+        return this;
+    }
+
     public ItemStack item() {
         if (material == null || material == Material.AIR) {
             SneakyThrow.sneaky(new ItemCreationException("Unable to create an item with air (or null) materials"));
         }
 
-        ItemStack itemStack = new ItemStack(material, amount);
-
+        ItemStack itemStack;
+        if (!skull) {
+            itemStack = new ItemStack(material, amount);
+        } else {
+            itemStack = Items.getSkull(skullOwner);
+        }
         ItemMeta itemMeta = itemStack.getItemMeta();
 
         //If the name for the builders been set then set the name on the item

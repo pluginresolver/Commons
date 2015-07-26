@@ -3,12 +3,12 @@ package com.caved_in.commons.item;
 import org.bukkit.enchantments.Enchantment;
 
 public class EnchantWrapper {
-    private Enchantment enchantment;
+    private String enchantment;
     private int level;
     private boolean itemGlow = false;
 
     public EnchantWrapper(Enchantment enchantment, int level, boolean itemGlow) {
-        this.enchantment = enchantment;
+        this.enchantment = enchantment.getName();
         this.level = level;
         this.itemGlow = itemGlow;
     }
@@ -19,7 +19,7 @@ public class EnchantWrapper {
     }
 
     public Enchantment getEnchantment() {
-        return enchantment;
+        return Enchantment.getByName(enchantment);
     }
 
     public boolean isItemGlow() {
@@ -31,7 +31,7 @@ public class EnchantWrapper {
     }
 
     public EnchantWrapper enchantment(Enchantment enchant, int level) {
-        this.enchantment = enchant;
+        this.enchantment = enchant.getName();
         this.level = level;
         return this;
     }

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.caved_in</groupId>
     <artifactId>commons</artifactId>
-    <version>1.8.7</version>
+    <version>1.8.7.1</version>
 
     <properties>
         <powermock.version>1.6.1</powermock.version>
@@ -70,6 +70,7 @@
                                     <include>org.projectlombok:lombok:jar:*</include>
                                     <include>cglib:cglib-nodep:jar:*</include>
                                     <include>org.javatuples:javatuples:jar:*</include>
+                                    <include>com.google.code.gson:gson:jar:*</include>
                                     <!--<include>org.apache.logging.log4j:log4j-api:jar:*</include>-->
                                     <!--<include>org.apache.logging.log4j:log4j-core:jar:*</include>-->
                                     <!--Shade in SK89Q's command framework so other plugins can depend
@@ -238,6 +239,12 @@
             <artifactId>javatuples</artifactId>
             <version>LATEST</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,12 +1,14 @@
 package com.caved_in.commons;
 
 import com.caved_in.commons.chat.PrivateMessageManager;
+import com.caved_in.commons.chat.Title;
 import com.caved_in.commons.command.commands.*;
-import com.caved_in.commons.config.Configuration;
-import com.caved_in.commons.config.SqlConfiguration;
-import com.caved_in.commons.config.WorldConfiguration;
+import com.caved_in.commons.config.*;
+import com.caved_in.commons.config.adapters.*;
 import com.caved_in.commons.debug.Debugger;
 import com.caved_in.commons.debug.actions.*;
+import com.caved_in.commons.entity.MobSpawnData;
+import com.caved_in.commons.inventory.ArmorInventory;
 import com.caved_in.commons.item.ItemSetManager;
 import com.caved_in.commons.item.SavedItemManager;
 import com.caved_in.commons.listeners.*;
@@ -16,14 +18,20 @@ import com.caved_in.commons.plugin.BukkitPlugin;
 import com.caved_in.commons.plugin.Plugins;
 import com.caved_in.commons.reflection.ReflectionUtilities;
 import com.caved_in.commons.sql.ServerDatabaseConnector;
+import com.caved_in.commons.warp.Warp;
 import com.caved_in.commons.warp.Warps;
 import com.caved_in.commons.world.Worlds;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.messaging.Messenger;
+import org.bukkit.potion.PotionEffect;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -76,6 +84,25 @@ public class Commons extends BukkitPlugin {
     saving and loading of data to and from the database.
      */
     private ServerDatabaseConnector database = null;
+
+    private Gson gson = new GsonBuilder().setPrettyPrinting()
+            .registerTypeAdapter(ItemStack.class, new ItemStackAdapter())
+//            .registerTypeAdapter(ItemStack.class, new BrokenItemStackAdapter())
+            .registerTypeAdapter(ArmorInventory.class, new ArmorInventoryAdapter())
+            .registerTypeAdapter(CommandConfiguration.class, new CommandConfigurationAdapter())
+            .registerTypeAdapter(DebugConfig.class, new DebugConfigAdapater())
+//            .registerTypeAdapter(InventoryAdapter.class,new InventoryAdapter())
+            .registerTypeAdapter(Location.class, new LocationAdapter())
+            .registerTypeAdapter(MaintenanceConfiguration.class, new MaintenanceConfigurationAdapter())
+            .registerTypeAdapter(MobSpawnData.class, new MobSpawnDataAdapter())
+            .registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter())
+            .registerTypeAdapter(PremiumConfiguration.class, new PremiumConfigurationAdapter())
+            .registerTypeAdapter(SqlConfiguration.class, new SqlConfigurationAdapter())
+            .registerTypeAdapter(Title.class, new TitleAdapter())
+            .registerTypeAdapter(Warp.class, new WarpAdapter())
+            .registerTypeAdapter(WarpConfig.class, new WarpConfigAdapter())
+            .registerTypeAdapter(WorldConfiguration.class, new WorldConfigAdapter())
+            .create();
 
     public static synchronized Commons getInstance() {
         if (plugin == null) {
@@ -297,11 +324,27 @@ public class Commons extends BukkitPlugin {
         }
 
         try {
-            File configFile = new File(PLUGIN_DATA_FOLDER + "Config.xml");
-            if (!configFile.exists()) {
-                configSerializer.write(new Configuration(), configFile);
+            File xmlConfigFile = new File(PLUGIN_DATA_FOLDER + "Config.xml");
+
+            File jsonConfigFile = new File(PLUGIN_DATA_FOLDER + "Config.json");
+
+            if (jsonConfigFile.exists()) {
+                globalConfig = gson.fromJson(FileUtils.readFileToString(jsonConfigFile), Configuration.class);
+                debug("Loaded the Configuration settings from Config.json");
             }
-            globalConfig = configSerializer.read(Configuration.class, configFile);
+
+            if (xmlConfigFile.exists()) {
+                globalConfig = configSerializer.read(Configuration.class, xmlConfigFile);
+                debug("Loaded the global config file from Config.xml");
+            }
+
+            if (!jsonConfigFile.exists() && xmlConfigFile.exists() && globalConfig != null) {
+                FileUtils.writeStringToFile(jsonConfigFile, gson.toJson(globalConfig));
+                debug("Converted the previous Config.xml to Config.json");
+                FileUtils.forceDelete(xmlConfigFile);
+                debug("Deleted the old configuration @ Config.xml");
+            }
+
         } catch (Exception Ex) {
             Ex.printStackTrace();
         }
@@ -310,7 +353,6 @@ public class Commons extends BukkitPlugin {
 		Initialize the rules class!
 		 */
         Rules.init(new File(RULES_LOCATION));
-
     }
 
     public static class Rules {
@@ -321,9 +363,9 @@ public class Commons extends BukkitPlugin {
                 "4. You may not spam",
                 "5. You may not advertise",
                 "6. You musn't use excessive caps",
-                "7. You mayn not advertise any links that are not Tunnels related",
+                "7. You may not advertise any links that are not Tunnels related",
                 "8. You musn't abuse glitches or game exploits",
-                "9. You may not troll any of the members, or ellicit ill behaviour in any way.",
+                "9. You may not troll any of the members, or elicit ill behaviour in any way.",
                 "10. You must be respectful to players",
                 "11. Do not abuse glitches, and report them if found",
                 "12. Do not steal, nor cheat the server or players",
@@ -415,7 +457,8 @@ public class Commons extends BukkitPlugin {
                 new DebugKickStick(),
                 new DebugTitle(),
                 new DebugConfirmationMenu(),
-                new DebugExplosionArrow()
+                new DebugExplosionArrow(),
+                new DebugHandItemJsonSerialize()
         );
     }
 
@@ -543,5 +586,9 @@ public class Commons extends BukkitPlugin {
 
     public boolean isServerFull() {
         return Players.getOnlineCount() >= Bukkit.getMaxPlayers();
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 }

@@ -218,4 +218,72 @@ public class WorldConfiguration {
     public boolean hasFallDamage() {
         return fallDamage;
     }
+
+    public void weatherDisabled(boolean disableWeather) {
+        this.disableWeather = disableWeather;
+    }
+
+    public void lightningDisabled(boolean disableLightning) {
+        this.disableLightning = disableLightning;
+    }
+
+    public void thunderDisabled(boolean disableThunder) {
+        this.disableThunder = disableThunder;
+    }
+
+    public void iceAccumulation(boolean disableIceAccumulation) {
+        this.disableIceAccumulation = disableIceAccumulation;
+    }
+
+    public void snowAccumulationDisabled(boolean disableSnowAccumulation) {
+        this.disableSnowAccumulation = disableSnowAccumulation;
+    }
+
+    public void myceliumSpreadDisabled(boolean disableMyceliumSpread) {
+        this.disableMyceliumSpread = disableMyceliumSpread;
+    }
+
+    public void fireSpreadDisabled(boolean disableFireSpread) {
+        this.disableFireSpread = disableFireSpread;
+    }
+
+    public void launchpadPressurePlates(boolean launchpadPressurePlates) {
+        this.launchpadPressurePlates = launchpadPressurePlates;
+    }
+
+    public void enableJoinMessages(boolean enableJoinMessages) {
+        this.enableJoinMessages = enableJoinMessages;
+    }
+
+    public void enableLeaveMessages(boolean enableLeaveMessages) {
+        this.enableLeaveMessages = enableLeaveMessages;
+    }
+
+    public void enableBlockBreak(boolean enableBlockBreak) {
+        this.enableBlockBreak = enableBlockBreak;
+    }
+
+    public void enableItemPickup(boolean enableItemPickup) {
+        this.enableItemPickup = enableItemPickup;
+    }
+
+    public void enableItemDrop(boolean enableItemDrop) {
+        this.enableItemDrop = enableItemDrop;
+    }
+
+    public void enableFoodChange(boolean enableFoodChange) {
+        this.enableFoodChange = enableFoodChange;
+    }
+
+    public void externalChatHandler(boolean externalChatHandler) {
+        this.externalChatHandler = externalChatHandler;
+    }
+
+    public void explosionFireworks(boolean explosionFireworks) {
+        this.explosionFireworks = explosionFireworks;
+    }
+
+    public void fallDamage(boolean fallDamage) {
+        this.fallDamage = fallDamage;
+    }
 }
